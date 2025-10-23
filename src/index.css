@@ -246,3 +246,86 @@ body {
     display: none !important;
   }
 }
+
+/* ========================================
+   MOBILE SCROLL PERFORMANCE OPTIMIZATIONS
+   ======================================== */
+
+/* Optimize scrolling containers */
+* {
+  -webkit-overflow-scrolling: touch;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Optimize elements that animate or transform */
+.card-hover,
+.btn-primary,
+.btn-secondary,
+.btn-outline {
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+  /* Disable hover effects on touch devices */
+  .card-hover:hover {
+    transform: none;
+  }
+
+  /* Simplify animations on mobile */
+  * {
+    animation-duration: 200ms !important;
+    transition-duration: 150ms !important;
+  }
+
+  /* Optimize scroll containers */
+  body,
+  #root,
+  .overflow-auto,
+  .overflow-scroll,
+  .overflow-y-auto,
+  .overflow-y-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+  }
+
+  /* Optimize images and media */
+  img,
+  video,
+  canvas {
+    will-change: auto;
+    transform: translateZ(0);
+  }
+}
+
+/* Optimize fixed/sticky elements */
+.fixed,
+.sticky,
+[class*="fixed"],
+[class*="sticky"] {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Performance optimization for large lists */
+.overflow-auto,
+.overflow-scroll {
+  contain: layout style paint;
+  content-visibility: auto;
+}

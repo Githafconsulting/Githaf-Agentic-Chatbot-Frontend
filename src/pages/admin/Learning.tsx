@@ -763,3 +763,4 @@ export const LearningPage: React.FC = () => {
     </div>
   );
 };
+export default LearningPage;

@@ -73,3 +73,4 @@ export const EmbedPage: React.FC = () => {
     </div>
   );
 };
+export default EmbedPage;
