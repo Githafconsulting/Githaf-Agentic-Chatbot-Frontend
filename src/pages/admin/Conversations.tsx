@@ -359,4 +359,3 @@ export const ConversationsPage: React.FC = () => {
     </motion.div>
   );
 };
-export default ConversationsPage;

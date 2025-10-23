@@ -651,4 +651,3 @@ export const FlaggedPage: React.FC = () => {
     </motion.div>
   );
 };
-export default FlaggedPage;

@@ -581,4 +581,3 @@ const TopicsTab: React.FC<{ config: ChatbotConfig; updateConfig: (updates: Parti
     </div>
   );
 };
-export default ChatbotSettingsPage;

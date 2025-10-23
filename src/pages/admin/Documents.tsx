@@ -1214,4 +1214,3 @@ export const DocumentsPage: React.FC = () => {
     </motion.div>
   );
 };
-export default DocumentsPage;

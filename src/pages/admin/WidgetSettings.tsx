@@ -972,4 +972,3 @@ export const WidgetSettingsPage: React.FC = () => {
     </>
   );
 };
-export default WidgetSettingsPage;

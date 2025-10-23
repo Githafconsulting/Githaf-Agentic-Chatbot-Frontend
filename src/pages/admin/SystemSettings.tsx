@@ -607,4 +607,3 @@ export const SystemSettingsPage: React.FC = () => {
     </motion.div>
   );
 };
-export default SystemSettingsPage;

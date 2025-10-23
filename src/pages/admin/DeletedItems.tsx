@@ -633,4 +633,3 @@ export const DeletedItemsPage: React.FC = () => {
     </motion.div>
   );
 };
-export default DeletedItemsPage;
