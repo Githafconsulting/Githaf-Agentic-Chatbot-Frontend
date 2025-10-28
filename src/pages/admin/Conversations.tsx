@@ -4,6 +4,7 @@ import { MessageSquare, Clock, Star, User, Bot, ThumbsUp, ThumbsDown, MessageCir
 import { apiService } from '../../services/api';
 import type { Conversation, ConversationMessage } from '../../types';
 import { staggerContainer, staggerItem } from '../../utils/animations';
+import { Card, Button, Badge } from '../../components/ui';
 
 export const ConversationsPage: React.FC = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -79,63 +80,66 @@ export const ConversationsPage: React.FC = () => {
           <MessageSquare className="text-white" size={24} />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-slate-50">Conversations</h1>
-          <p className="text-slate-400 text-sm mt-0.5">View all customer interactions</p>
+          <h1 className="text-2xl font-bold text-theme-primary">Conversations</h1>
+          <p className="text-theme-muted text-sm mt-0.5">View all customer interactions</p>
         </div>
       </motion.div>
 
       <AnimatePresence>
         {error && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl flex items-center gap-3 shadow-soft"
-          >
-            <AlertCircle size={20} />
-            <span className="flex-1">{error}</span>
-          </motion.div>
+          <Card glass variant="elevated">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="px-6 py-4 flex items-center gap-3"
+            >
+              <AlertCircle size={20} className="text-red-500" />
+              <span className="flex-1 text-theme-primary">{error}</span>
+            </motion.div>
+          </Card>
         )}
       </AnimatePresence>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[calc(100vh-220px)]">
         {/* Conversations List */}
-        <motion.div variants={staggerItem} className="card-hover rounded-2xl shadow-soft overflow-hidden flex flex-col">
-          <div className="p-6 border-b border-neutral-100 bg-gradient-to-r from-primary-50 to-secondary-50 flex-shrink-0">
-            <h2 className="text-xl font-semibold text-slate-50 flex items-center gap-2">
-              <MessageSquare size={24} className="text-primary-600" />
-              All Conversations
-              {!loading && (
-                <span className="ml-2 text-slate-300 font-medium">
-                  ({conversations.length})
-                </span>
-              )}
-            </h2>
-          </div>
+        <Card glass variant="elevated" className="overflow-hidden flex flex-col">
+          <motion.div variants={staggerItem}>
+            <div className="p-6 border-b border-theme bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 flex-shrink-0">
+              <h2 className="text-xl font-semibold text-theme-primary flex items-center gap-2">
+                <MessageSquare size={24} className="text-primary-600" />
+                All Conversations
+                {!loading && (
+                  <Badge variant="secondary" size="sm" className="ml-2">
+                    {conversations.length}
+                  </Badge>
+                )}
+              </h2>
+            </div>
 
-          <div className="divide-y divide-neutral-100 flex-1 overflow-y-auto">
-            {loading ? (
-              <div className="p-12 text-center">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                  className="w-12 h-12 border-4 border-primary-200 border-t-primary-600 rounded-full mx-auto mb-4"
-                />
-                <p className="text-slate-300">Loading conversations...</p>
-              </div>
-            ) : conversations.length === 0 ? (
-              <div className="p-12 text-center">
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: 'spring', duration: 0.5 }}
-                  className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-100 to-secondary-100 flex items-center justify-center mx-auto mb-4"
-                >
-                  <MessageSquare size={40} className="text-primary-600" />
-                </motion.div>
-                <p className="text-slate-300 text-lg">No conversations yet</p>
-              </div>
-            ) : (
+            <div className="divide-y divide-theme flex-1 overflow-y-auto">
+              {loading ? (
+                <div className="p-12 text-center">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                    className="w-12 h-12 border-4 border-primary-200 border-t-primary-600 rounded-full mx-auto mb-4"
+                  />
+                  <p className="text-theme-secondary">Loading conversations...</p>
+                </div>
+              ) : conversations.length === 0 ? (
+                <div className="p-12 text-center">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: 'spring', duration: 0.5 }}
+                    className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-100 to-secondary-100 flex items-center justify-center mx-auto mb-4"
+                  >
+                    <MessageSquare size={40} className="text-primary-600" />
+                  </motion.div>
+                  <p className="text-theme-secondary text-lg">No conversations yet</p>
+                </div>
+              ) : (
               conversations.map((conv, index) => (
                 <motion.div
                   key={conv.id}
@@ -146,7 +150,7 @@ export const ConversationsPage: React.FC = () => {
                   className={`p-4 cursor-pointer transition-all ${
                     selectedConversation?.id === conv.id
                       ? 'bg-gradient-to-r from-blue-900/60 to-cyan-900/60 border-2 border-blue-400 rounded-lg shadow-lg shadow-blue-400/40'
-                      : 'hover:bg-slate-700'
+                      : 'hover:bg-theme-secondary'
                   }`}
                   whileHover={{ x: 4 }}
                 >
@@ -161,7 +165,7 @@ export const ConversationsPage: React.FC = () => {
                       className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg ${
                         selectedConversation?.id === conv.id
                           ? 'bg-gradient-to-br from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/50'
-                          : 'bg-slate-700 text-slate-400'
+                          : 'bg-theme-secondary text-theme-muted'
                       }`}
                     >
                       {conversations.length - index}
@@ -172,12 +176,12 @@ export const ConversationsPage: React.FC = () => {
                         <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center flex-shrink-0">
                           <Hash size={16} className="text-white" />
                         </div>
-                        <span className="font-medium text-slate-50 text-sm font-mono">
+                        <span className="font-medium text-theme-primary text-sm font-mono">
                           {conv.session_id.substring(0, 12)}...
                         </span>
                       </div>
 
-                      <div className="flex items-center gap-3 text-xs text-slate-300">
+                      <div className="flex items-center gap-3 text-xs text-theme-secondary">
                         <span className="flex items-center gap-1">
                           <Calendar size={12} />
                           {new Date(conv.created_at).toLocaleDateString()}
@@ -219,16 +223,18 @@ export const ConversationsPage: React.FC = () => {
               ))
             )}
           </div>
-        </motion.div>
+          </motion.div>
+        </Card>
 
         {/* Conversation Details */}
-        <motion.div variants={staggerItem} className="card-hover rounded-2xl shadow-soft overflow-hidden flex flex-col">
-          <div className="p-6 border-b border-neutral-100 bg-gradient-to-r from-secondary-50 to-primary-50 flex-shrink-0">
-            <h2 className="text-xl font-semibold text-slate-50 flex items-center gap-2">
-              <Bot size={24} className="text-secondary-600" />
-              Conversation Details
-            </h2>
-          </div>
+        <Card glass variant="elevated" className="overflow-hidden flex flex-col">
+          <motion.div variants={staggerItem}>
+            <div className="p-6 border-b border-theme bg-gradient-to-r from-secondary-50 to-primary-50 dark:from-secondary-900/20 dark:to-primary-900/20 flex-shrink-0">
+              <h2 className="text-xl font-semibold text-theme-primary flex items-center gap-2">
+                <Bot size={24} className="text-secondary-600" />
+                Conversation Details
+              </h2>
+            </div>
 
           <div className="p-6 flex-1 overflow-y-auto">
             {!selectedConversation ? (
@@ -239,9 +245,9 @@ export const ConversationsPage: React.FC = () => {
                   transition={{ type: 'spring', duration: 0.5 }}
                   className="w-20 h-20 rounded-2xl bg-gradient-to-br from-neutral-100 to-neutral-200 flex items-center justify-center mx-auto mb-4"
                 >
-                  <MessageSquare size={40} className="text-slate-500" />
+                  <MessageSquare size={40} className="text-theme-muted" />
                 </motion.div>
-                <p className="text-slate-400">Select a conversation to view details</p>
+                <p className="text-theme-muted">Select a conversation to view details</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -325,16 +331,16 @@ export const ConversationsPage: React.FC = () => {
                             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-secondary-500 to-secondary-600 flex items-center justify-center flex-shrink-0">
                               <Bot size={16} className="text-white" />
                             </div>
-                            <div className="bg-slate-700 rounded-2xl rounded-tl-sm py-3 px-4 max-w-[80%] border border-slate-600">
-                              <p className="text-sm text-white">{msg.content}</p>
+                            <div className="bg-theme-secondary rounded-2xl rounded-tl-sm py-3 px-4 max-w-[80%] border border-theme">
+                              <p className="text-sm text-theme-primary">{msg.content}</p>
 
                               {/* Context Used */}
                               {msg.context_used && Object.keys(msg.context_used).length > 0 && (
-                                <details className="mt-2 pt-2 border-t border-slate-600">
+                                <details className="mt-2 pt-2 border-t border-theme">
                                   <summary className="text-xs text-primary-400 cursor-pointer hover:text-primary-300">
                                     View context sources
                                   </summary>
-                                  <div className="mt-2 text-xs text-slate-300">
+                                  <div className="mt-2 text-xs text-theme-secondary">
                                     {JSON.stringify(msg.context_used, null, 2)}
                                   </div>
                                 </details>
@@ -343,7 +349,7 @@ export const ConversationsPage: React.FC = () => {
                           </div>
                         )}
 
-                        <div className={`text-xs text-slate-400 flex items-center gap-1 ${msg.role === 'user' ? 'justify-end' : 'justify-start ml-10'}`}>
+                        <div className={`text-xs text-theme-muted flex items-center gap-1 ${msg.role === 'user' ? 'justify-end' : 'justify-start ml-10'}`}>
                           <Clock size={10} />
                           {new Date(msg.created_at).toLocaleTimeString()}
                         </div>
@@ -354,7 +360,8 @@ export const ConversationsPage: React.FC = () => {
               </div>
             )}
           </div>
-        </motion.div>
+          </motion.div>
+        </Card>
       </div>
     </motion.div>
   );

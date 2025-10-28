@@ -5,6 +5,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import type { WidgetConfig } from '../../types';
 import { staggerContainer, staggerItem } from '../../utils/animations';
 import { apiService } from '../../services/api';
+import { Card, Button, Badge } from '../../components/ui';
 
 export const WidgetSettingsPage: React.FC = () => {
   const [activeSection, setActiveSection] = useState<'style' | 'position' | 'content'>('style');
@@ -438,43 +439,42 @@ export const WidgetSettingsPage: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-slate-800 rounded-xl border border-slate-700 shadow-2xl p-6 max-w-md w-full mx-4"
+            className="bg-theme-primary/95 backdrop-blur-md rounded-xl border border-theme shadow-2xl p-6 max-w-md w-full mx-4"
           >
             <div className="flex items-start gap-4 mb-4">
               <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
                 <Save className="text-blue-400" size={24} />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-slate-50 mb-1">
+                <h3 className="text-lg font-semibold text-theme-primary mb-1">
                   Save Widget Settings?
                 </h3>
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-theme-muted">
                   These changes will be applied to all embedded widgets on your website within 30 seconds.
                 </p>
               </div>
             </div>
 
             <div className="flex gap-3 justify-end">
-              <motion.button
+              <Button
+                variant="secondary"
+                size="md"
                 onClick={() => setShowConfirmModal(false)}
-                className="px-4 py-2 rounded-lg text-sm font-medium text-slate-300 bg-slate-700 hover:bg-slate-600 transition-colors"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
               >
                 Cancel
-              </motion.button>
-              <motion.button
+              </Button>
+              <Button
+                variant="primary"
+                size="md"
+                icon={<CheckCircle size={16} />}
                 onClick={async () => {
                   setShowConfirmModal(false);
                   await performSave();
                 }}
-                className="px-4 py-2 rounded-lg text-sm font-medium text-white bg-green-600 hover:bg-green-700 transition-colors flex items-center gap-2"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                className="bg-green-600 hover:bg-green-700"
               >
-                <CheckCircle size={16} />
                 Yes, Save Changes
-              </motion.button>
+              </Button>
             </div>
           </motion.div>
         </div>
@@ -493,54 +493,36 @@ export const WidgetSettingsPage: React.FC = () => {
             <Settings className="text-white" size={24} />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-slate-50">Widget Customization</h1>
-            <p className="text-slate-400 text-sm mt-0.5">Customize and embed your chatbot</p>
+            <h1 className="text-2xl font-bold text-theme-primary">Widget Customization</h1>
+            <p className="text-theme-muted text-sm mt-0.5">Customize and embed your chatbot</p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
           {/* Reset Button - only show when there are unsaved changes */}
           {hasChanges && (
-            <motion.button
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
+            <Button
+              variant="secondary"
+              size="lg"
+              icon={<RotateCcw size={18} />}
               onClick={handleReset}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium text-slate-300 bg-slate-700 hover:bg-slate-600 transition-all"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
             >
-              <RotateCcw size={18} />
               Reset
-            </motion.button>
+            </Button>
           )}
 
           {/* Save Button */}
-          <motion.button
+          <Button
+            variant={saved ? 'primary' : hasChanges ? 'primary' : 'secondary'}
+            size="lg"
+            icon={saved ? <CheckCircle size={18} /> : <Save size={18} />}
             onClick={handleSave}
             disabled={!hasChanges}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all ${
-              saved
-                ? 'bg-green-600 text-white'
-                : hasChanges
-                ? 'bg-primary-600 text-white hover:bg-primary-700'
-                : 'bg-slate-700 text-slate-500 cursor-not-allowed'
-            }`}
-            whileHover={hasChanges ? { scale: 1.02 } : {}}
+            className={saved ? 'bg-green-600 hover:bg-green-700' : ''}
             whileTap={hasChanges ? { scale: 0.98 } : {}}
           >
-            {saved ? (
-              <>
-                <CheckCircle size={18} />
-                Saved
-              </>
-            ) : (
-              <>
-                <Save size={18} />
-                Save Settings
-              </>
-            )}
-          </motion.button>
+            {saved ? 'Saved' : 'Save Settings'}
+          </Button>
         </div>
       </motion.div>
 

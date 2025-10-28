@@ -445,6 +445,32 @@ class ApiService {
     const response = await this.api.post('/api/v1/chatbot-config/reset');
     return response.data;
   }
+
+  // Generic HTTP methods for custom endpoints
+  async get<T = any>(url: string, config?: any): Promise<T> {
+    const response = await this.api.get(url, config);
+    return response.data;
+  }
+
+  async post<T = any>(url: string, data?: any, config?: any): Promise<T> {
+    const response = await this.api.post(url, data, config);
+    return response.data;
+  }
+
+  async put<T = any>(url: string, data?: any, config?: any): Promise<T> {
+    const response = await this.api.put(url, data, config);
+    return response.data;
+  }
+
+  async patch<T = any>(url: string, data?: any, config?: any): Promise<T> {
+    const response = await this.api.patch(url, data, config);
+    return response.data;
+  }
+
+  async delete<T = any>(url: string, config?: any): Promise<T> {
+    const response = await this.api.delete(url, config);
+    return response.data;
+  }
 }
 
 export const apiService = new ApiService();

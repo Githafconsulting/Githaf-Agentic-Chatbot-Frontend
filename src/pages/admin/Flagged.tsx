@@ -5,6 +5,7 @@ import { apiService } from '../../services/api';
 import { type FlaggedQuery } from '../../types';
 import { staggerContainer, staggerItem } from '../../utils/animations';
 import { DateRangePicker } from '../../components/DateRangePicker';
+import { Card, Button, Badge } from '../../components/ui';
 
 type RatingFilter = 'all' | 'positive' | 'negative';
 
@@ -190,25 +191,25 @@ export const FlaggedPage: React.FC = () => {
             <Flag className="text-white" size={24} />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-slate-50">User Feedback</h1>
-            <p className="text-slate-400 text-sm mt-0.5">Review all user feedback and ratings</p>
+            <h1 className="text-2xl font-bold text-theme-primary">User Feedback</h1>
+            <p className="text-theme-muted text-sm mt-0.5">Review all user feedback and ratings</p>
           </div>
         </div>
 
         {/* Stats Summary */}
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <div className="text-2xl font-bold text-slate-100">{stats.positiveRate}%</div>
-            <div className="text-xs text-slate-400">Satisfaction Rate</div>
+            <div className="text-2xl font-bold text-theme-primary">{stats.positiveRate}%</div>
+            <div className="text-xs text-theme-muted">Satisfaction Rate</div>
           </div>
-          <div className="h-12 w-px bg-slate-700"></div>
+          <div className="h-12 w-px bg-theme-secondary"></div>
           <div className="text-right">
             <div className="text-2xl font-bold text-green-400">{stats.positive}</div>
-            <div className="text-xs text-slate-400">Positive</div>
+            <div className="text-xs text-theme-muted">Positive</div>
           </div>
           <div className="text-right">
             <div className="text-2xl font-bold text-red-400">{stats.negative}</div>
-            <div className="text-xs text-slate-400">Negative</div>
+            <div className="text-xs text-theme-muted">Negative</div>
           </div>
         </div>
       </motion.div>
@@ -216,43 +217,45 @@ export const FlaggedPage: React.FC = () => {
       {/* Error Alert */}
       <AnimatePresence>
         {error && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl flex items-center gap-3 shadow-soft"
-          >
-            <AlertCircle size={20} />
-            <span className="flex-1">{error}</span>
-          </motion.div>
+          <Card glass variant="elevated">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="px-6 py-4 flex items-center gap-3"
+            >
+              <AlertCircle size={20} className="text-red-500" />
+              <span className="flex-1 text-theme-primary">{error}</span>
+            </motion.div>
+          </Card>
         )}
       </AnimatePresence>
 
       {/* Filters */}
-      <motion.div variants={staggerItem} className="card-hover rounded-2xl shadow-soft p-6">
-        <div className="flex items-center justify-between mb-4">
+      <Card glass variant="elevated" className="p-6">
+        <motion.div variants={staggerItem}>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Filter size={20} className="text-blue-400" />
+              <h2 className="text-lg font-semibold text-theme-primary">Filters</h2>
+            </div>
           <div className="flex items-center gap-2">
-            <Filter size={20} className="text-blue-400" />
-            <h2 className="text-lg font-semibold text-slate-100">Filters</h2>
-          </div>
-          <div className="flex items-center gap-2">
-            <motion.button
+            <Button
+              variant="ghost"
+              size="sm"
+              icon={<X size={14} />}
               onClick={clearFilters}
-              className="text-sm text-slate-400 hover:text-slate-200 flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-slate-700 transition-colors"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
             >
-              <X size={14} />
               Clear Filters
-            </motion.button>
-            <motion.button
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => setShowFilters(!showFilters)}
-              className="text-sm text-blue-400 hover:text-blue-300 px-3 py-1.5 rounded-lg hover:bg-blue-900/20 transition-colors"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className="text-blue-400 hover:text-blue-300"
             >
               {showFilters ? 'Hide' : 'Show'}
-            </motion.button>
+            </Button>
           </div>
         </div>
 
@@ -266,13 +269,13 @@ export const FlaggedPage: React.FC = () => {
             >
               {/* Rating Filter */}
               <div>
-                <label className="block text-sm font-medium text-slate-200 mb-2">
+                <label className="block text-sm font-medium text-theme-secondary mb-2">
                   Rating Type
                 </label>
                 <select
                   value={ratingFilter}
                   onChange={(e) => setRatingFilter(e.target.value as RatingFilter)}
-                  className={`w-full px-4 py-2.5 bg-slate-800 border-2 rounded-xl text-slate-200 focus:outline-none focus:ring-2 hover:bg-slate-700 transition-all ${
+                  className={`w-full px-4 py-2.5 bg-theme-secondary border-2 rounded-xl text-theme-primary focus:outline-none focus:ring-2 hover:bg-theme-secondary/80 transition-all ${
                     ratingFilter === 'all'
                       ? 'border-blue-500 focus:ring-blue-500'
                       : ratingFilter === 'positive'
@@ -288,7 +291,7 @@ export const FlaggedPage: React.FC = () => {
 
               {/* Date Range Picker */}
               <div>
-                <label className="block text-sm font-medium text-slate-200 mb-2">
+                <label className="block text-sm font-medium text-theme-secondary mb-2">
                   Date Range
                 </label>
                 <DateRangePicker value={dateRange} onChange={setDateRange} />
@@ -296,18 +299,20 @@ export const FlaggedPage: React.FC = () => {
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.div>
+        </motion.div>
+      </Card>
 
       {/* Results Count */}
       {!loading && (
-        <motion.div variants={staggerItem} className="text-sm text-slate-400">
-          Showing <span className="font-semibold text-slate-200">{filteredQueries.length}</span> of{' '}
-          <span className="font-semibold text-slate-200">{flaggedQueries.length}</span> feedback entries
+        <motion.div variants={staggerItem} className="text-sm text-theme-muted">
+          Showing <span className="font-semibold text-theme-primary">{filteredQueries.length}</span> of{' '}
+          <span className="font-semibold text-theme-primary">{flaggedQueries.length}</span> feedback entries
         </motion.div>
       )}
 
       {/* Feedback List */}
-      <motion.div variants={staggerItem} className="card-hover rounded-2xl shadow-soft overflow-hidden">
+      <Card glass variant="elevated" className="overflow-hidden">
+        <motion.div variants={staggerItem}>
         {loading ? (
           <div className="p-12 text-center">
             <motion.div
@@ -315,7 +320,7 @@ export const FlaggedPage: React.FC = () => {
               transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
               className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full mx-auto mb-4"
             />
-            <p className="text-slate-300">Loading feedback...</p>
+            <p className="text-theme-secondary">Loading feedback...</p>
           </div>
         ) : filteredQueries.length === 0 ? (
           <div className="p-12 text-center">
@@ -327,17 +332,17 @@ export const FlaggedPage: React.FC = () => {
             >
               <MessageSquare size={40} className="text-purple-600" />
             </motion.div>
-            <p className="text-slate-300 text-lg">
+            <p className="text-theme-secondary text-lg">
               {flaggedQueries.length === 0 ? 'No feedback yet' : 'No feedback matching filters'}
             </p>
-            <p className="text-slate-400 text-sm mt-2">
+            <p className="text-theme-muted text-sm mt-2">
               {flaggedQueries.length === 0
                 ? 'User feedback will appear here once they rate responses'
                 : 'Try adjusting your filters to see more results'}
             </p>
           </div>
         ) : (
-          <div className="divide-y divide-slate-700">
+          <div className="divide-y divide-theme">
             <AnimatePresence>
               {filteredQueries.map((query, index) => {
                 const isPositive = query.rating === 1;
@@ -349,7 +354,7 @@ export const FlaggedPage: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ delay: index * 0.05 }}
-                    className="p-6 hover:bg-slate-700/50 transition-colors"
+                    className="p-6 hover:bg-theme-secondary transition-colors"
                   >
                     <div className="flex items-start gap-4">
                       {/* Rating Icon */}
@@ -374,21 +379,18 @@ export const FlaggedPage: React.FC = () => {
                       <div className="flex-1">
                         {/* Header */}
                         <div className="flex items-center justify-between mb-4">
-                          <span className="text-sm text-slate-400 flex items-center gap-1">
+                          <span className="text-sm text-theme-muted flex items-center gap-1">
                             <Clock size={14} />
                             {new Date(query.created_at).toLocaleString()}
                           </span>
                           <div className="flex items-center gap-2">
-                            <span
-                              className={`px-3 py-1.5 rounded-full text-sm font-medium flex items-center gap-1.5 ${
-                                isPositive
-                                  ? 'bg-green-100 text-green-700'
-                                  : 'bg-red-100 text-red-700'
-                              }`}
+                            <Badge
+                              variant={isPositive ? 'success' : 'danger'}
+                              size="sm"
                             >
                               {isPositive ? <ThumbsUp size={14} /> : <ThumbsDown size={14} />}
-                              {isPositive ? 'Helpful' : 'Not Helpful'}
-                            </span>
+                              <span className="ml-1">{isPositive ? 'Helpful' : 'Not Helpful'}</span>
+                            </Badge>
                             {/* Action Buttons */}
                             <motion.button
                               onClick={() => handleEditFeedback(query)}
@@ -419,41 +421,41 @@ export const FlaggedPage: React.FC = () => {
 
                         {/* User Query */}
                         <div className="mb-4">
-                          <h3 className="text-sm font-semibold text-slate-200 mb-2 flex items-center gap-1.5">
+                          <h3 className="text-sm font-semibold text-theme-secondary mb-2 flex items-center gap-1.5">
                             <User size={16} className="text-blue-400" />
                             User Query:
                           </h3>
                           <div className="bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-lg">
-                            <p className="text-slate-100">{query.query}</p>
+                            <p className="text-theme-primary">{query.query}</p>
                           </div>
                         </div>
 
                         {/* Bot Response */}
                         <div className="mb-4">
-                          <h3 className="text-sm font-semibold text-slate-200 mb-2 flex items-center gap-1.5">
+                          <h3 className="text-sm font-semibold text-theme-secondary mb-2 flex items-center gap-1.5">
                             <Bot size={16} className="text-cyan-400" />
                             Bot Response:
                           </h3>
-                          <div className="bg-slate-800 border-l-4 border-slate-600 p-4 rounded-lg">
-                            <p className="text-slate-100">{query.response}</p>
+                          <div className="bg-theme-secondary border-l-4 border-theme p-4 rounded-lg">
+                            <p className="text-theme-primary">{query.response}</p>
                           </div>
                         </div>
 
                         {/* User Comment */}
                         {query.comment && (
                           <div className="mb-4">
-                            <h3 className="text-sm font-semibold text-slate-200 mb-2 flex items-center gap-1.5">
+                            <h3 className="text-sm font-semibold text-theme-secondary mb-2 flex items-center gap-1.5">
                               <MessageSquare size={16} className="text-yellow-400" />
                               User Feedback:
                             </h3>
                             <div className="bg-yellow-900/20 border-l-4 border-yellow-500 p-4 rounded-lg">
-                              <p className="text-slate-100 italic">"{query.comment}"</p>
+                              <p className="text-theme-primary italic">"{query.comment}"</p>
                             </div>
                           </div>
                         )}
 
                         {/* Metadata */}
-                        <div className="flex items-center gap-4 text-xs text-slate-400">
+                        <div className="flex items-center gap-4 text-xs text-theme-muted">
                           <span className="flex items-center gap-1">
                             <Hash size={12} />
                             Msg: {query.message_id.substring(0, 8)}...
@@ -473,48 +475,51 @@ export const FlaggedPage: React.FC = () => {
             </AnimatePresence>
           </div>
         )}
-      </motion.div>
+        </motion.div>
+      </Card>
 
       {/* Action Items */}
       <AnimatePresence>
         {filteredQueries.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            variants={staggerItem}
-            className="bg-gradient-to-br from-blue-900/30 to-indigo-900/30 border border-blue-700/50 rounded-2xl p-6 shadow-soft"
-          >
-            <div className="flex items-start gap-4">
-              <motion.div
-                className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center flex-shrink-0"
-                whileHover={{ scale: 1.1, rotate: 5 }}
-              >
-                <Lightbulb size={24} className="text-white" />
-              </motion.div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-blue-200 text-lg flex items-center gap-2">
-                  <Info size={20} />
-                  Insights & Actions
-                </h3>
-                <div className="space-y-2 mt-3">
-                  {stats.negative > 0 && (
-                    <p className="text-sm text-slate-300 leading-relaxed">
-                      • <strong>{stats.negative} negative feedback entries</strong> - Review these to identify knowledge gaps and improve responses.
+          <Card glass variant="elevated">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              variants={staggerItem}
+              className="p-6"
+            >
+              <div className="flex items-start gap-4">
+                <motion.div
+                  className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center flex-shrink-0"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                >
+                  <Lightbulb size={24} className="text-white" />
+                </motion.div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-blue-200 text-lg flex items-center gap-2">
+                    <Info size={20} />
+                    Insights & Actions
+                  </h3>
+                  <div className="space-y-2 mt-3">
+                    {stats.negative > 0 && (
+                      <p className="text-sm text-theme-secondary leading-relaxed">
+                        • <strong>{stats.negative} negative feedback entries</strong> - Review these to identify knowledge gaps and improve responses.
+                      </p>
+                    )}
+                    {stats.positive > 0 && (
+                      <p className="text-sm text-theme-secondary leading-relaxed">
+                        • <strong>{stats.positive} positive feedback entries</strong> - These indicate successful responses. Analyze patterns for best practices.
+                      </p>
+                    )}
+                    <p className="text-sm text-theme-secondary leading-relaxed">
+                      • Consider adding more relevant documentation to the knowledge base for queries with negative feedback.
                     </p>
-                  )}
-                  {stats.positive > 0 && (
-                    <p className="text-sm text-slate-300 leading-relaxed">
-                      • <strong>{stats.positive} positive feedback entries</strong> - These indicate successful responses. Analyze patterns for best practices.
-                    </p>
-                  )}
-                  <p className="text-sm text-slate-300 leading-relaxed">
-                    • Consider adding more relevant documentation to the knowledge base for queries with negative feedback.
-                  </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </Card>
         )}
       </AnimatePresence>
 

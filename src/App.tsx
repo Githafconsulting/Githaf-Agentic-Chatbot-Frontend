@@ -4,7 +4,12 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
 import { AdminLayout } from './components/layout/AdminLayout';
-import { Home } from './pages/Home';
+import { HomeNew } from './pages/HomeNew';
+import { Features } from './pages/Features';
+import { Pricing } from './pages/Pricing';
+import { Contact } from './pages/Contact';
+import { Signup } from './pages/Signup';
+import { Onboarding } from './pages/Onboarding';
 import { Login } from './pages/Login';
 import { AnalyticsPage } from './pages/admin/Analytics';
 import { DocumentsPage } from './pages/admin/Documents';
@@ -16,7 +21,9 @@ import { SystemSettingsPage } from './pages/admin/SystemSettings';
 import { DeletedItemsPage } from './pages/admin/DeletedItems';
 import { LearningPage } from './pages/admin/Learning';
 import { ChatbotSettings } from './pages/admin/ChatbotSettings';
+import Dashboard from './pages/admin/Dashboard';
 import { EmbedPage } from './pages/Embed';
+import { GlowComponentsShowcase } from './pages/GlowComponentsShowcase';
 import './i18n'; // Initialize i18n
 
 function App() {
@@ -27,9 +34,19 @@ function App() {
           <BrowserRouter>
         <Routes>
           {/* Public Routes */}
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<HomeNew />} />
+          <Route path="/features" element={<Features />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/embed" element={<EmbedPage />} />
+
+          {/* Glow Components Demo Pages */}
+          <Route path="/glow-showcase" element={<GlowComponentsShowcase />} />
+
+          {/* Onboarding (semi-protected - requires signup) */}
+          <Route path="/onboarding" element={<Onboarding />} />
 
           {/* Admin Routes */}
           <Route
@@ -40,7 +57,8 @@ function App() {
               </ProtectedRoute>
             }
           >
-            <Route index element={<AnalyticsPage />} />
+            <Route index element={<Dashboard />} />
+            <Route path="analytics" element={<AnalyticsPage />} />
             <Route path="documents" element={<DocumentsPage />} />
             <Route path="conversations" element={<ConversationsPage />} />
             <Route path="flagged" element={<FlaggedPage />} />

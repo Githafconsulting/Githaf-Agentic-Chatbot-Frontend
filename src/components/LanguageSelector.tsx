@@ -67,7 +67,7 @@ export const LanguageSelector: React.FC = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -10 }}
               transition={{ duration: 0.15 }}
-              className="absolute top-full mt-2 left-0 bg-slate-800 border border-slate-700 rounded-xl shadow-strong overflow-hidden min-w-[200px] max-w-[240px] z-50"
+              className="absolute top-full mt-2 left-1/2 -translate-x-1/2 lg:left-0 lg:translate-x-0 bg-slate-800/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-700/50 rounded-xl shadow-strong overflow-hidden min-w-[200px] max-w-[240px] z-50"
               style={{
                 maxHeight: 'calc(100vh - 100px)',
                 overflowY: 'auto'

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { UserPlus, Trash2, Shield, User as UserIcon, Mail, Users } from 'lucide-react';
 import { apiService } from '../../services/api';
+import { Card, Button, Badge } from '../../components/ui';
 
 interface User {
   id: string;
@@ -95,108 +96,111 @@ export const UsersPage: React.FC = () => {
             <Users className="text-white" size={24} />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-slate-50">Team Members</h1>
-            <p className="text-slate-400 text-sm mt-0.5">Manage dashboard users and permissions</p>
+            <h1 className="text-2xl font-bold text-theme-primary">Team Members</h1>
+            <p className="text-theme-muted text-sm mt-0.5">Manage dashboard users and permissions</p>
           </div>
         </div>
 
-        <button
+        <Button
+          variant="primary"
+          size="lg"
+          icon={<UserPlus size={20} />}
           onClick={() => setShowCreateModal(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
         >
-          <UserPlus size={20} />
           Add User
-        </button>
+        </Button>
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-          {error}
-        </div>
+        <Card glass variant="elevated">
+          <div className="px-6 py-4 flex items-center gap-3">
+            <span className="flex-1 text-red-500">{error}</span>
+          </div>
+        </Card>
       )}
 
       {/* Users List */}
-      <div className="bg-slate-800 rounded-lg shadow">
+      <Card glass variant="elevated" className="overflow-hidden">
         {loading ? (
-          <div className="p-8 text-center text-slate-400">Loading users...</div>
+          <div className="p-8 text-center text-theme-secondary">Loading users...</div>
         ) : users.length === 0 ? (
-          <div className="p-8 text-center text-slate-400">
-            <UserIcon size={48} className="mx-auto mb-4 text-slate-500" />
+          <div className="p-8 text-center text-theme-secondary">
+            <UserIcon size={48} className="mx-auto mb-4 text-theme-muted" />
             <p>No users yet. Create your first team member.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-700">
-              <thead className="bg-slate-700">
+            <table className="min-w-full divide-y divide-theme">
+              <thead className="bg-theme-secondary">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-theme-muted uppercase tracking-wider">
                     User
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-theme-muted uppercase tracking-wider">
                     Role
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-theme-muted uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-theme-muted uppercase tracking-wider">
                     Created
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-slate-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-theme-muted uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-slate-800 divide-y divide-slate-700">
+              <tbody className="divide-y divide-theme">
                 {users.map((user) => (
-                  <tr key={user.id} className="hover:bg-slate-700">
+                  <tr key={user.id} className="hover:bg-theme-secondary">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
                           <Mail size={20} className="text-blue-600" />
                         </div>
                         <div className="ml-4">
-                          <div className="text-sm font-medium text-slate-50">
+                          <div className="text-sm font-medium text-theme-primary">
                             {user.full_name || 'No name'}
                           </div>
-                          <div className="text-sm text-slate-400">{user.email}</div>
+                          <div className="text-sm text-theme-muted">{user.email}</div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {user.is_admin ? (
-                        <span className="px-3 py-1 inline-flex items-center gap-1 text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
+                        <Badge variant="primary" size="sm">
                           <Shield size={14} />
-                          Admin
-                        </span>
+                          <span className="ml-1">Admin</span>
+                        </Badge>
                       ) : (
-                        <span className="px-3 py-1 inline-flex items-center gap-1 text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                        <Badge variant="secondary" size="sm">
                           <UserIcon size={14} />
-                          User
-                        </span>
+                          <span className="ml-1">User</span>
+                        </Badge>
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {user.is_active ? (
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                        <Badge variant="success" size="sm">
                           Active
-                        </span>
+                        </Badge>
                       ) : (
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                        <Badge variant="danger" size="sm">
                           Inactive
-                        </span>
+                        </Badge>
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-400">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-theme-muted">
                       {new Date(user.created_at).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        icon={<Trash2 size={18} />}
                         onClick={() => handleDeleteUser(user.id, user.email)}
                         className="text-red-400 hover:text-red-300"
-                        title="Delete user"
-                      >
-                        <Trash2 size={18} />
-                      </button>
+                      />
                     </td>
                   </tr>
                 ))}
@@ -204,17 +208,17 @@ export const UsersPage: React.FC = () => {
             </table>
           </div>
         )}
-      </div>
+      </Card>
 
       {/* Create User Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-slate-800 rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-xl font-semibold text-slate-50 mb-4">Create New User</h3>
+          <Card glass variant="elevated" className="p-6 max-w-md w-full">
+            <h3 className="text-xl font-semibold text-theme-primary mb-4">Create New User</h3>
 
             <form onSubmit={handleCreateUser} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-200 mb-1">
+                <label className="block text-sm font-medium text-theme-secondary mb-1">
                   Email Address *
                 </label>
                 <input
@@ -227,7 +231,7 @@ export const UsersPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-200 mb-1">
+                <label className="block text-sm font-medium text-theme-secondary mb-1">
                   Full Name
                 </label>
                 <input
@@ -239,7 +243,7 @@ export const UsersPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-200 mb-1">
+                <label className="block text-sm font-medium text-theme-secondary mb-1">
                   Password * (min 8 characters)
                 </label>
                 <input
@@ -260,7 +264,7 @@ export const UsersPage: React.FC = () => {
                   onChange={(e) => setFormData({ ...formData, is_admin: e.target.checked })}
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
-                <label htmlFor="is_admin" className="ml-2 block text-sm text-slate-200">
+                <label htmlFor="is_admin" className="ml-2 block text-sm text-theme-secondary">
                   Grant admin privileges
                 </label>
               </div>
@@ -272,28 +276,32 @@ export const UsersPage: React.FC = () => {
               )}
 
               <div className="flex gap-3 mt-6">
-                <button
+                <Button
                   type="submit"
-                  disabled={creating}
-                  className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                  variant="primary"
+                  size="lg"
+                  isLoading={creating}
+                  className="flex-1"
                 >
                   {creating ? 'Creating...' : 'Create User'}
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
+                  variant="secondary"
+                  size="lg"
                   onClick={() => {
                     setShowCreateModal(false);
                     setFormData({ email: '', password: '', full_name: '', is_admin: false });
                     setError('');
                   }}
                   disabled={creating}
-                  className="flex-1 bg-gray-200 text-slate-200 px-4 py-2 rounded-lg hover:bg-gray-300"
+                  className="flex-1"
                 >
                   Cancel
-                </button>
+                </Button>
               </div>
             </form>
-          </div>
+          </Card>
         </div>
       )}
     </div>

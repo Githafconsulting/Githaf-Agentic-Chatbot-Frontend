@@ -359,3 +359,91 @@ export interface ChatbotConfigUpdate {
   llmMaxTokens?: number;
   topicKeywords?: Record<string, string[]>;
 }
+
+// Multi-Tenant Chatbot Types
+export interface Chatbot {
+  id: string;
+  company_id: string;
+  name: string;
+  description?: string;
+  greeting_message: string;
+
+  // Branding
+  primary_color?: string;
+  secondary_color?: string;
+  logo_url?: string;
+
+  // Configuration
+  model_preset: 'fast' | 'balanced' | 'accurate';
+  temperature: number;
+  max_tokens: number;
+  top_k: number;
+  similarity_threshold: number;
+
+  // Access Control
+  allowed_domains: string[];
+  rate_limit_per_ip: number;
+
+  // Status
+  is_active: boolean;
+  deploy_status: 'draft' | 'deployed' | 'paused';
+
+  // Metrics
+  total_conversations: number;
+  total_messages: number;
+  avg_satisfaction?: number;
+
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ChatbotCreate {
+  name: string;
+  description?: string;
+  greeting_message?: string;
+  primary_color?: string;
+  secondary_color?: string;
+  logo_url?: string;
+  model_preset?: 'fast' | 'balanced' | 'accurate';
+  temperature?: number;
+  max_tokens?: number;
+  top_k?: number;
+  similarity_threshold?: number;
+  allowed_domains?: string[];
+  rate_limit_per_ip?: number;
+}
+
+export interface ChatbotUpdate {
+  name?: string;
+  description?: string;
+  greeting_message?: string;
+  primary_color?: string;
+  secondary_color?: string;
+  logo_url?: string;
+  model_preset?: 'fast' | 'balanced' | 'accurate';
+  temperature?: number;
+  max_tokens?: number;
+  top_k?: number;
+  similarity_threshold?: number;
+  allowed_domains?: string[];
+  rate_limit_per_ip?: number;
+}
+
+export interface ChatbotDeploy {
+  deploy_status: 'deployed' | 'paused';
+}
+
+export interface ChatbotStats {
+  total_conversations: number;
+  total_messages: number;
+  avg_satisfaction?: number;
+  avg_response_time?: number;
+  satisfaction_rate?: number;
+  response_rate?: number;
+  top_queries: Array<{ query: string; count: number }>;
+  daily_stats: Array<{ date: string; conversations: number; messages: number }>;
+}
+
+export interface ChatbotWithEmbedCode extends Chatbot {
+  embed_code: string;
+}

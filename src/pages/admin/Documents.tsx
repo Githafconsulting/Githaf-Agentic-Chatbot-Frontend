@@ -4,6 +4,7 @@ import { Upload, Link as LinkIcon, Trash2, FileText, ExternalLink, Database, Fil
 import { apiService } from '../../services/api';
 import type { Document, DraftDocument } from '../../types';
 import { staggerContainer, staggerItem } from '../../utils/animations';
+import { Card, Button, Badge } from '../../components/ui';
 
 type TabType = 'documents' | 'drafts';
 
@@ -274,20 +275,23 @@ export const DocumentsPage: React.FC = () => {
               <FileText className="text-white" size={24} />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-slate-50">Knowledge Base</h1>
-              <p className="text-slate-400 text-sm mt-0.5">Manage documents and review AI-generated drafts</p>
+              <h1 className="text-2xl font-bold text-theme-primary">Knowledge Base</h1>
+              <p className="text-theme-muted text-sm mt-0.5">Manage documents and review AI-generated drafts</p>
             </div>
           </div>
 
           {activeTab === 'documents' && (
             <div className="flex gap-3">
-              <motion.label
-                className="btn-primary cursor-pointer flex items-center gap-2 px-6 py-3 rounded-xl shadow-md"
-                whileHover={{ scale: 1.05, boxShadow: '0 8px 20px -5px rgba(30, 64, 175, 0.4)' }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Upload size={20} />
-                {uploading ? 'Uploading...' : 'Upload File'}
+              <label className="cursor-pointer">
+                <Button
+                  variant="primary"
+                  size="lg"
+                  icon={<Upload size={20} />}
+                  isLoading={uploading}
+                  as="span"
+                >
+                  {uploading ? 'Uploading...' : 'Upload File'}
+                </Button>
                 <input
                   type="file"
                   accept=".pdf,.txt,.docx"
@@ -295,29 +299,28 @@ export const DocumentsPage: React.FC = () => {
                   disabled={uploading}
                   className="hidden"
                 />
-              </motion.label>
+              </label>
 
-              <motion.button
+              <Button
+                variant="secondary"
+                size="lg"
+                icon={<LinkIcon size={20} />}
                 onClick={() => setShowUrlModal(true)}
-                className="btn-secondary flex items-center gap-2 px-6 py-3 rounded-xl shadow-md"
-                whileHover={{ scale: 1.05, boxShadow: '0 8px 20px -5px rgba(14, 165, 233, 0.4)' }}
-                whileTap={{ scale: 0.98 }}
               >
-                <LinkIcon size={20} />
                 Add from URL
-              </motion.button>
+              </Button>
             </div>
           )}
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 border-b border-slate-700">
+        <div className="flex gap-2 border-b border-theme">
           <button
             onClick={() => setActiveTab('documents')}
             className={`px-6 py-3 font-medium transition-colors relative ${
               activeTab === 'documents'
-                ? 'text-primary-400'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'text-primary-500'
+                : 'text-theme-muted hover:text-theme-primary'
             }`}
           >
             <Files size={18} className="inline mr-2" />
@@ -325,7 +328,7 @@ export const DocumentsPage: React.FC = () => {
             {activeTab === 'documents' && (
               <motion.div
                 layoutId="activeTab"
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-400"
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-500"
               />
             )}
           </button>
@@ -333,8 +336,8 @@ export const DocumentsPage: React.FC = () => {
             onClick={() => setActiveTab('drafts')}
             className={`px-6 py-3 font-medium transition-colors relative ${
               activeTab === 'drafts'
-                ? 'text-primary-400'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'text-primary-500'
+                : 'text-theme-muted hover:text-theme-primary'
             }`}
           >
             <Sparkles size={18} className="inline mr-2" />
@@ -342,7 +345,7 @@ export const DocumentsPage: React.FC = () => {
             {activeTab === 'drafts' && (
               <motion.div
                 layoutId="activeTab"
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-400"
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-500"
               />
             )}
           </button>
@@ -350,41 +353,47 @@ export const DocumentsPage: React.FC = () => {
 
         {/* Filter Dropdown - Only show for Documents tab */}
         {activeTab === 'documents' && (
-          <div className="flex items-center gap-3 bg-slate-800 p-4 rounded-xl border border-slate-700">
-            <label className="text-sm font-medium text-slate-300">Filter by Source:</label>
-            <select
-              value={sourceTypeFilter}
-              onChange={(e) => setSourceTypeFilter(e.target.value as any)}
-              className="px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
-            >
+          <Card glass variant="elevated" className="p-4">
+            <div className="flex items-center gap-3">
+              <label className="text-sm font-medium text-theme-secondary">Filter by Source:</label>
+              <select
+                value={sourceTypeFilter}
+                onChange={(e) => setSourceTypeFilter(e.target.value as any)}
+                className="px-4 py-2 bg-theme-secondary border border-theme rounded-lg text-theme-primary focus:outline-none focus:ring-2 focus:ring-primary-500"
+              >
               <option value="all">All Documents ({documents.length})</option>
               <option value="upload">Manually Uploaded ({documents.filter(d => d.source_type === 'upload').length})</option>
               <option value="url">From URL ({documents.filter(d => d.source_type === 'url').length})</option>
               <option value="draft_published">Auto-Published Drafts ({documents.filter(d => d.source_type === 'draft_published').length})</option>
             </select>
-          </div>
+            </div>
+          </Card>
         )}
       </motion.div>
 
       <AnimatePresence>
         {error && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl flex items-center gap-3 shadow-soft"
-          >
-            <AlertCircle size={20} />
-            <span className="flex-1">{error}</span>
-          </motion.div>
+          <Card glass variant="elevated">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="px-6 py-4 flex items-center gap-3"
+            >
+              <AlertCircle size={20} className="text-red-500" />
+              <span className="flex-1 text-theme-primary">{error}</span>
+            </motion.div>
+          </Card>
         )}
       </AnimatePresence>
 
       {/* Content Section - Documents or Drafts */}
-      <motion.div
-        variants={staggerItem}
-        className="card-hover rounded-2xl shadow-soft overflow-hidden"
+      <Card
+        glass
+        variant="elevated"
+        className="overflow-hidden"
       >
+        <motion.div variants={staggerItem}>
         {activeTab === 'documents' ? (
           // Documents Tab
           loading ? (
@@ -394,7 +403,7 @@ export const DocumentsPage: React.FC = () => {
                 transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                 className="w-12 h-12 border-4 border-primary-200 border-t-primary-600 rounded-full mx-auto mb-4"
               />
-              <p className="text-slate-300">Loading documents...</p>
+              <p className="text-theme-secondary">Loading documents...</p>
             </div>
           ) : filteredDocuments.length === 0 ? (
             <div className="p-12 text-center">
@@ -406,15 +415,15 @@ export const DocumentsPage: React.FC = () => {
               >
                 <FileText size={40} className="text-primary-600" />
               </motion.div>
-              <p className="text-slate-300 text-lg">
+              <p className="text-theme-secondary text-lg">
                 {sourceTypeFilter === 'all' ? 'No documents yet' : `No ${sourceTypeFilter === 'draft_published' ? 'auto-published drafts' : sourceTypeFilter === 'upload' ? 'uploaded documents' : 'URL documents'} found`}
               </p>
-              <p className="text-slate-400 text-sm mt-2">
+              <p className="text-theme-muted text-sm mt-2">
                 {sourceTypeFilter === 'all' ? 'Upload a file or add from URL to get started' : 'Try changing the filter to see other documents'}
               </p>
             </div>
           ) : (
-            <div className="divide-y divide-slate-700">
+            <div className="divide-y divide-theme">
               <AnimatePresence>
                 {filteredDocuments.map((doc, index) => (
                   <motion.div
@@ -423,7 +432,7 @@ export const DocumentsPage: React.FC = () => {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 20 }}
                     transition={{ delay: index * 0.05 }}
-                    className="p-6 hover:bg-slate-700 transition-colors"
+                    className="p-6 hover:bg-theme-secondary transition-colors"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 min-w-0">
@@ -439,23 +448,23 @@ export const DocumentsPage: React.FC = () => {
                               <FileText size={20} className="text-white" />
                             )}
                           </div>
-                          <h3 className="text-lg font-semibold text-slate-50 truncate">{doc.title}</h3>
-                          <span className={`text-xs px-3 py-1 rounded-full font-medium flex-shrink-0 ${
-                            doc.source_type === 'draft_published'
-                              ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30'
-                              : 'bg-primary-100 text-primary-700'
-                          }`}>
+                          <h3 className="text-lg font-semibold text-theme-primary truncate">{doc.title}</h3>
+                          <Badge
+                            variant={doc.source_type === 'draft_published' ? 'warning' : 'primary'}
+                            size="sm"
+                            className="flex-shrink-0"
+                          >
                             {doc.source_type === 'draft_published' ? '✨ Auto-Published' : doc.source_type}
-                          </span>
+                          </Badge>
                         </div>
 
                         {doc.summary && (
-                          <p className="text-sm text-slate-300 line-clamp-2 mb-3 ml-13">
+                          <p className="text-sm text-theme-secondary line-clamp-2 mb-3 ml-13">
                             {doc.summary}
                           </p>
                         )}
 
-                        <div className="flex items-center gap-4 text-sm text-slate-400 ml-13 flex-wrap">
+                        <div className="flex items-center gap-4 text-sm text-theme-muted ml-13 flex-wrap">
                           {doc.file_type && (
                             <span className="flex items-center gap-1">
                               <FileText size={14} />
@@ -553,7 +562,7 @@ export const DocumentsPage: React.FC = () => {
           draftsLoading ? (
             <div className="p-12 text-center">
               <Loader2 className="animate-spin w-12 h-12 text-primary-400 mx-auto mb-4" />
-              <p className="text-slate-300">Loading drafts...</p>
+              <p className="text-theme-secondary">Loading drafts...</p>
             </div>
           ) : drafts.length === 0 ? (
             <div className="p-12 text-center">
@@ -565,11 +574,11 @@ export const DocumentsPage: React.FC = () => {
               >
                 <Sparkles size={40} className="text-yellow-600" />
               </motion.div>
-              <p className="text-slate-300 text-lg">No pending drafts</p>
-              <p className="text-slate-400 text-sm mt-2">AI-generated drafts will appear here for review</p>
+              <p className="text-theme-secondary text-lg">No pending drafts</p>
+              <p className="text-theme-muted text-sm mt-2">AI-generated drafts will appear here for review</p>
             </div>
           ) : (
-            <div className="divide-y divide-slate-700">
+            <div className="divide-y divide-theme">
               <AnimatePresence>
                 {drafts.map((draft, index) => (
                   <motion.div
@@ -675,7 +684,8 @@ export const DocumentsPage: React.FC = () => {
             </div>
           )
         )}
-      </motion.div>
+        </motion.div>
+      </Card>
 
       {/* URL Modal */}
       <AnimatePresence>
